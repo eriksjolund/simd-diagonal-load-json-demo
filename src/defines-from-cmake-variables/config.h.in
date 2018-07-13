@@ -1,0 +1,6 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#define MATRIX_WIDTH @MATRIX_WIDTH@u
+
+#endif  // CONFIG_H
