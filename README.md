@@ -63,7 +63,7 @@ The included command-line tool __demo__ performs the algortihm and prints out th
     [null,null,null,null,null,"61","54","47"]
     [null,null,null,null,null,null,"62","55"]
     [null,null,null,null,null,null,null,"63"]
-    esjolund@laptop:~
+    user@ubuntu:~
 
 # Installation
 
