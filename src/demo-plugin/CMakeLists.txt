@@ -3,6 +3,7 @@ project(demo-plugin)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(simd-compile-options REQUIRED)
 find_package(libsimdpp REQUIRED)
 find_package(simd-diagonal-load REQUIRED)
 
