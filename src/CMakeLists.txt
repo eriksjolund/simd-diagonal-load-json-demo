@@ -1,4 +1,5 @@
-include(GNUInstallDirs)                                                                                                                                 
+include(GNUInstallDirs)
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/simd-diagonal-load-json-demo")
 set(plugin_install_dir "${CMAKE_INSTALL_LIBDIR}/simd-diagonal-load-json-demo/plugins")
 
 function(add_my_program progname)
