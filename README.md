@@ -65,20 +65,66 @@ The included command-line tool __demo__ performs the algortihm and prints out th
     [null,null,null,null,null,null,null,"63"]
     user@ubuntu:~
 
-# Installation
+# Installation by building a Singularity container
+
+The easiest way to install simd-diagonal-load-json-demo is by building a Singularity container.
+
+```
+    sudo apt-get install singularity-container
+    git clone https://github.com/eriksjolund/simd-diagonal-load-json-demo.git
+    sudo singularity build -w /tmp/container.img simd-diagonal-load-json-demo/Singularity.debian
+```
+
+# Running simd-diagonal-load-json-demo commands in the Singularity container
+
+```
+    user@ubuntu:~$ singularity exec /tmp/a3.img generate-input
+    Wrong number of arguments. To see command line usage, execute with --help flag
+    user@ubuntu:~$ singularity exec /tmp/a3.img generate-input --help
+    Usage: generate-input num_matrices integertype simdvector_bitlength matrix_width
+
+    integertype choose from: 
+	 uint8_t
+	 uint16_t
+	 uint32_t
+	 uint64_t
+	 int8_t
+	 int16_t
+	 int32_t
+	 int64_t
+
+    user@ubuntu:~$ 
+```
+
+# Traditional installation by building on the host
+
+Instead of installing __simd-diagonal-load-json-demo__ into a Singularity container
+you could of course install  __simd-diagonal-load-json-demo__ in the traditional way directly into your system.
+Here is a sketch of how to do it:
 
 First install the requirements.
 
 On Ubuntu the commands are:
 
 ```
-sudo apt-get install protobuf-c-compiler
-sudo apt-get install libprotobuf-dev
-sudo apt-get install jq
-sudo apt-get install qtbase5-dev
+    sudo apt-get install protobuf-c-compiler protobuf-compiler ninja-build
+    sudo apt-get install libprotobuf-dev qtbase5-dev git build-essential jq
 ```
 
-After that perfom a standard CMake installation. There are some CMake variables that can be adjusted:
+Then download a new CMake executable (version > 3.11.4) from cmake.org.
+
+Download source code for the dependencies 
+
+```
+    git clone https://github.com/eriksjolund/libsimdpp.git
+    git clone https://github.com/eriksjolund/simd-diagonal-load.git
+    git -C libsimdpp checkout modernize_cmake_support
+```
+
+After that perfom a standard CMake installation. First __libsimdpp__, then __simd-diagonal-load__ and
+finally __simd-diagonal-load-json-demo__ .
+
+For __simd-diagonal-load-json-demo__ there are some CMake variables that can be adjusted:
 
 * NUM_LOADS_MINIMUM
 * NUM_LOADS_MAXIMUM
