@@ -111,7 +111,7 @@ On Ubuntu the commands are:
     sudo apt-get install libprotobuf-dev qtbase5-dev git build-essential jq
 ```
 
-Then download a new CMake executable (version > 3.11.4) from cmake.org.
+Then download a new CMake executable (version >= 3.11.4) from cmake.org.
 
 Download source code for the dependencies 
 
