@@ -3,7 +3,7 @@
 Command-line tools to demonstrate the features of the C++ library [simd-diagonal-load](https://github.com/eriksjolund/simd-diagonal-load).
 Although simd-diagonal-load was implemented for high performance, simd-diagonal-load-json-demo is just for demonstration purposes (not for high performance).
 
-# The problem simd-diagonal-load tries to solve
+## The problem simd-diagonal-load tries to solve
 
 Sometimes there is a need to iterate with a sliding diagonal SIMD vector over a matrix of values. If the values can just be loaded column-wise, there
 is a need to somehow shift the values into the sliding diagonal.
@@ -26,7 +26,7 @@ for (int i=0; i < width - 16; ++i) {
 
 https://stackoverflow.com/questions/15198011/how-to-load-a-sliding-diagonal-vector-from-data-stored-column-wise-withsse
 
-# Quick demonstration
+## Quick demonstration
 
 Generate some input with the included command-line tool __generate-input__ 
 
@@ -65,7 +65,8 @@ The included command-line tool __demo__ performs the algortihm and prints out th
     [null,null,null,null,null,null,null,"63"]
     user@ubuntu:~
 
-# Installation by building a Singularity container
+# Installation
+## Installation by building a Singularity container
 
 The easiest way to install simd-diagonal-load-json-demo is by building a Singularity container.
 
@@ -75,7 +76,7 @@ The easiest way to install simd-diagonal-load-json-demo is by building a Singula
     sudo singularity build -w /tmp/container.img simd-diagonal-load-json-demo/Singularity.debian
 ```
 
-# Running simd-diagonal-load-json-demo commands in the Singularity container
+### Running simd-diagonal-load-json-demo commands in the Singularity container
 
 ```
     user@ubuntu:~$ singularity exec /tmp/a3.img generate-input
@@ -93,7 +94,7 @@ The JSON input is read from stdin
     user@ubuntu:~$ 
 ```
 
-# Traditional installation by building on the host
+## Traditional installation
 
 Instead of installing __simd-diagonal-load-json-demo__ into a Singularity container
 you could of course install  __simd-diagonal-load-json-demo__ in the traditional way directly into your system.
