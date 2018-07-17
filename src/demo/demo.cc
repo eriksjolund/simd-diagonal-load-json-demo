@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
         if (loader.demo_plugin().num_loads() == num_loads &&
             loader.demo_plugin().num_vertical_mixing() == num_vertical_mixing &&
             loader.demo_plugin().num_vertical_subdivisions() ==
-                input_root.spec().num_matrices() &&
+                input_root.spec().num_vertical_subdivisions() &&
             loader.demo_plugin().simdvector_bitlength() ==
                 input_root.spec().simdvector_bitlength() &&
             loader.demo_plugin().integertype() ==
@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
         std::cerr << "num_loads = " << num_loads << "\n";
         std::cerr << "num_vertical_mixing  = " << num_vertical_mixing << "\n";
         std::cerr << "num_vertical_subdivions = "
-                  << input_root.spec().num_matrices() << "\n";
+                  << input_root.spec().num_vertical_subdivisions() << "\n";
         std::cerr << "simdvector_bitlength = "
                   << input_root.spec().simdvector_bitlength() << "\n";
         //        std::cerr << "num_bits_per_element = " <<

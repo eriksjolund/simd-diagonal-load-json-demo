@@ -19,7 +19,7 @@ std::vector<std::string> enum_values_as_strings() {
 
 std::string command_line_usage_string() {
   std::stringstream stream;
-  stream << "Usage: generate-input num_matrices integertype "
+  stream << "Usage: generate-input num_vertical_subdivisions integertype "
             "simdvector_bitlength matrix_width\n\n"
             "integertype choose from: \n";
 
@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
       return EXIT_FAILURE;
     }
     case 5: {
-      unsigned num_matrices = atoi(argv[1]);
+      unsigned num_vertical_subdivisions = atoi(argv[1]);
       input::Spec_integertype spec_integertype_value;
       std::string integertype_str = argv[2];
       bool res = input::Spec::integertype_Parse(integertype_str,
@@ -59,35 +59,35 @@ int main(int argc, char** argv) {
 
       switch (spec_integertype_value) {
         case input::Spec::uint8_t:
-          print_generated_input<uint8_t>(num_matrices, spec_integertype_value,
+          print_generated_input<uint8_t>(num_vertical_subdivisions, spec_integertype_value,
                                          simdvector_bitlength, matrix_width);
           break;
         case input::Spec::uint16_t:
-          print_generated_input<uint16_t>(num_matrices, spec_integertype_value,
+          print_generated_input<uint16_t>(num_vertical_subdivisions, spec_integertype_value,
                                           simdvector_bitlength, matrix_width);
           break;
         case input::Spec::uint32_t:
-          print_generated_input<uint32_t>(num_matrices, spec_integertype_value,
+          print_generated_input<uint32_t>(num_vertical_subdivisions, spec_integertype_value,
                                           simdvector_bitlength, matrix_width);
           break;
         case input::Spec::uint64_t:
-          print_generated_input<uint64_t>(num_matrices, spec_integertype_value,
+          print_generated_input<uint64_t>(num_vertical_subdivisions, spec_integertype_value,
                                           simdvector_bitlength, matrix_width);
           break;
         case input::Spec::int8_t:
-          print_generated_input<int8_t>(num_matrices, spec_integertype_value,
+          print_generated_input<int8_t>(num_vertical_subdivisions, spec_integertype_value,
                                         simdvector_bitlength, matrix_width);
           break;
         case input::Spec::int16_t:
-          print_generated_input<int16_t>(num_matrices, spec_integertype_value,
+          print_generated_input<int16_t>(num_vertical_subdivisions, spec_integertype_value,
                                          simdvector_bitlength, matrix_width);
           break;
         case input::Spec::int32_t:
-          print_generated_input<int32_t>(num_matrices, spec_integertype_value,
+          print_generated_input<int32_t>(num_vertical_subdivisions, spec_integertype_value,
                                          simdvector_bitlength, matrix_width);
           break;
         case input::Spec::int64_t:
-          print_generated_input<int64_t>(num_matrices, spec_integertype_value,
+          print_generated_input<int64_t>(num_vertical_subdivisions, spec_integertype_value,
                                          simdvector_bitlength, matrix_width);
           break;
         default:

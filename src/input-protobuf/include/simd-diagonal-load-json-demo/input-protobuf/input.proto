@@ -2,7 +2,7 @@ syntax = "proto3";
 package input;
 
 message Spec {
-  uint32 num_matrices = 1;
+  uint32 num_vertical_subdivisions = 1;
   uint32 matrix_width = 2;
   uint32 simdvector_bitlength = 3;
   enum integertype {

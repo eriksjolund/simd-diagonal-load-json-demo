@@ -47,14 +47,19 @@ class JsonMatrix {
           looked_up_vec;
 
  public:
+ constexpr static const unsigned num_matrices = two_to_the_power_of<num_vertical_subdivisions>();
+
+
+ public:
   JsonMatrix(input::Root input_root) : input_root_{input_root} {
-    add_empty_matrices(output_root_, num_vertical_subdivisions);
+    add_empty_matrices(output_root_, num_matrices);
+
   }
 
   inline looked_up_vec get_next_column() {
     std::array<
-        std::array<integerT, simd_vector_length / num_vertical_subdivisions>,
-        num_vertical_subdivisions>
+        std::array<integerT, simd_vector_length / num_matrices>,
+        num_matrices>
         values;
     std::array<integerT, simd_vector_length> arr;
     std::size_t arr_index = 0;
@@ -62,18 +67,18 @@ class JsonMatrix {
     for (int j = 0; j < simd_vector_length; ++j) {
       auto element = simd_input->add_elements();
     }
-
-    for (int i = 0; i < num_vertical_subdivisions; ++i) {
+    for (int i = 0; i < num_matrices; ++i) {
       assert(i < input_root_.matrices_size());
       auto matrix = input_root_.matrices(i);
       assert(column_index_ < matrix.columns_size());
       auto cols = matrix.columns(column_index_);
+      for (int j = 0; j < simd_vector_length / num_matrices; ++j) {
 
-      for (int j = 0; j < simd_vector_length / num_vertical_subdivisions; ++j) {
+        assert(j < cols.elements_size());
         auto value = cols.elements(j);
         const auto simd_index =
-            get_index(i, j, simd_vector_length / num_vertical_subdivisions,
-                      num_vertical_subdivisions, num_vertical_mixing);
+            get_index(i, j, simd_vector_length / num_matrices,
+                      num_matrices, num_vertical_mixing);
         arr[simd_index] = value;
 
         // Is this correct use of the protobuf API?
@@ -102,15 +107,15 @@ class JsonMatrix {
     }
     {
       std::size_t arr_index = 0;
-      for (int i = 0; i < num_vertical_subdivisions; ++i) {
+      for (int i = 0; i < num_matrices; ++i) {
         assert(i < output_root_.result().matrices_size());
         auto matrix = output_root_.mutable_result()->mutable_matrices(i);
         auto diagonals = matrix->add_diagonals();
-        for (int j = 0; j < simd_vector_length / num_vertical_subdivisions;
+        for (int j = 0; j < simd_vector_length / num_matrices;
              ++j) {
           const auto ind =
-              get_index(i, j, simd_vector_length / num_vertical_subdivisions,
-                        num_vertical_subdivisions, num_vertical_mixing);
+              get_index(i, j, simd_vector_length / num_matrices,
+                        num_matrices, num_vertical_mixing);
           auto value = arr[ind];
           auto element = diagonals->add_elements();
           if (j >= startpos && j <= endpos) {

@@ -41,13 +41,13 @@ void DemoPlugin::iterate_diagonals(const input::Root& input_root) const {
       //    JsonMatrix< preprocessor_macro_prepend_std(INTEGERTYPE),
       JsonMatrix<std::INTEGERTYPE,
                  SIMDVECTOR_BITLENGTH /
-                     (num_bits_per_element * NUM_VERTICAL_SUBDIVISIONS),
+                     (num_bits_per_element),
                  NUM_LOADS, NUM_VERTICAL_SUBDIVISIONS, NUM_VERTICAL_MIXING,
                  MATRIX_WIDTH>;
   JsonM json_matrix{input_root};
   IterateDiagonalsTemplate<std::INTEGERTYPE,
-                           SIMDVECTOR_BITLENGTH / (num_bits_per_element *
-                                                   NUM_VERTICAL_SUBDIVISIONS),
+                           SIMDVECTOR_BITLENGTH / num_bits_per_element 
+                                                 ,
                            NUM_LOADS, NUM_VERTICAL_SUBDIVISIONS,
                            NUM_VERTICAL_MIXING, MATRIX_WIDTH, JsonMatrix>()
       .iterate_diagonals(json_matrix);

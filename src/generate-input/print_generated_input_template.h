@@ -5,9 +5,19 @@
 #include <string>
 #include <simd-diagonal-load-json-demo/input-protobuf/input.pb.h>
 #include <simd-diagonal-load-json-demo/protobuf-helper-funcs/print_json.h>
+#include <iostream>
+#include <cmath>
+
+namespace {
+
+unsigned two_to_the_power_of_impl2(unsigned num ) {
+ if (num == 0) { return 1; }
+   return 2 * two_to_the_power_of_impl2(num - 1);
+}
+}
 
 template <typename IntegerType>
-void print_generated_input(unsigned num_matrices,
+void print_generated_input(unsigned num_vertical_subdivisions,
                            input::Spec_integertype integertype,
                            unsigned simdvector_bitlength,
                            std::size_t matrix_width) {
@@ -16,7 +26,7 @@ void print_generated_input(unsigned num_matrices,
 
   auto spec = input_root.mutable_spec();
 
-  spec->set_num_matrices(num_matrices);
+  spec->set_num_vertical_subdivisions(num_vertical_subdivisions);
   spec->set_matrix_width(matrix_width);
 
   spec->set_integertype_to_use(integertype);
@@ -24,6 +34,7 @@ void print_generated_input(unsigned num_matrices,
 
   std::size_t arr_index = 0;
 
+  const unsigned num_matrices = two_to_the_power_of_impl2( num_vertical_subdivisions);
   const auto matrix_height =
       (simdvector_bitlength / (8 * sizeof(IntegerType))) / num_matrices;
 

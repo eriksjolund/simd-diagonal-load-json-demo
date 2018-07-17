@@ -15,10 +15,11 @@ set(NUM_LOADS_MAXIMUM "1" CACHE STRING "maximum NUM_LOADS (used when building pl
 set(NUM_MATRICES_MINIMUM "2" CACHE STRING "minimum NUM_MATRICES (used when building plugins)")
 set(NUM_MATRICES_MAXIMUM "2" CACHE STRING "maximum NUM_MATRICES (used when building plugins)")
 
-set(NUM_VERTICAL_MIXING_MINIMUM "1" CACHE STRING "minimum NUM_VERTICAL_MIXING (used when building plugins)")
+set(NUM_VERTICAL_MIXING_MINIMUM "0" CACHE STRING "minimum NUM_VERTICAL_MIXING (used when building plugins)")
 set(NUM_VERTICAL_MIXING_MAXIMUM "1" CACHE STRING "maximum NUM_VERTICAL_MIXING (used when building plugins)")
 
-set(NUM_VERTICAL_SUBDIVISIONS_MINIMUM "1" CACHE STRING "minimum NUM_VERTICAL_SUBDIVISIONS (used when building plugins)")
+
+set(NUM_VERTICAL_SUBDIVISIONS_MINIMUM "0" CACHE STRING "minimum NUM_VERTICAL_SUBDIVISIONS (used when building plugins)")
 set(NUM_VERTICAL_SUBDIVISIONS_MAXIMUM "1" CACHE STRING "maximum NUM_VERTICAL_SUBDIVISIONS (used when building plugins)")
 
 set(SIMDVECTOR_BITLENGTH_MINIMUM "256" CACHE STRING "minimum SIMDVECTOR_BITLENGTH (used when building plugins)")
