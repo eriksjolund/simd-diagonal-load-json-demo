@@ -15,7 +15,8 @@ function(create_plugin)
       NUM_VERTICAL_SUBDIVISIONS
       NUM_VERTICAL_MIXING
       MATRIX_WIDTH
-      INTEGERTYPE)
+      INTEGERTYPE
+      SIMD_ARCH)
   set(multiValueArgs) # empty
 
 cmake_parse_arguments(PARSE_ARGV 0 argument "${options}" "${oneValueArgs}" "${multiValueArgs}")
@@ -57,7 +58,7 @@ set (plugin_name "")
     target_compile_definitions(${plugin_name} PRIVATE "${def}")
   endforeach()
 
-  target_link_libraries(${plugin_name} PRIVATE libsimdpp::ARCH_X86_AVX2)
+  target_link_libraries(${plugin_name} PRIVATE libsimdpp::${argument_SIMD_ARCH})
   target_link_libraries(${plugin_name} PRIVATE Qt5::Core)
 
   target_link_libraries(${plugin_name} PRIVATE simd-diagonal-load-json-demo::demo-plugin-interface)
@@ -81,12 +82,15 @@ foreach(simdvector_bitlength RANGE ${SIMDVECTOR_BITLENGTH_MINIMUM} ${SIMDVECTOR_
     foreach(num_vertical_mixing RANGE ${NUM_VERTICAL_MIXING_MINIMUM} ${NUM_VERTICAL_MIXING_MAXIMUM} 1)
       foreach(matrix_width RANGE ${MATRIX_WIDTH_MINIMUM} ${MATRIX_WIDTH_MAXIMUM} 1)
         foreach(integertype IN LISTS INTEGERTYPES)
-          create_plugin(NUM_LOADS ${num_loads}
-                     SIMDVECTOR_BITLENGTH ${simdvector_bitlength}
-                     NUM_VERTICAL_SUBDIVISIONS ${num_vertical_subdivisions}
-                     NUM_VERTICAL_MIXING ${num_vertical_mixing}
-                     MATRIX_WIDTH ${matrix_width}
-		     INTEGERTYPE ${integertype})
+          foreach(simd_arch IN LISTS SIMD_ARCHS)
+            create_plugin(NUM_LOADS ${num_loads}
+                          SIMDVECTOR_BITLENGTH ${simdvector_bitlength}
+                          NUM_VERTICAL_SUBDIVISIONS ${num_vertical_subdivisions}
+                          NUM_VERTICAL_MIXING ${num_vertical_mixing}
+                          MATRIX_WIDTH ${matrix_width}
+                          INTEGERTYPE ${integertype}
+                          SIMD_ARCH ${simd_arch})
+        endforeach()
       endforeach()
     endforeach()
    endforeach()   

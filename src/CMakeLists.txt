@@ -28,8 +28,9 @@ set(SIMDVECTOR_BITLENGTH_MAXIMUM "256" CACHE STRING "maximum SIMDVECTOR_BITLENGT
 set(MATRIX_WIDTH_MINIMUM "8" CACHE STRING "minimum MATRIX_WIDTH")
 set(MATRIX_WIDTH_MAXIMUM "8" CACHE STRING "maximum MATRIX_WIDTH")
 
-set(INTEGERTYPES "uint8_t;int32_t" CACHE STRING "semi-colon seperated list of of integer types (e.g. uint8_t;int32_t")
+set(INTEGERTYPES "uint8_t;int32_t" CACHE STRING "semi-colon seperated list of of integer types (e.g. uint8_t;int32_t)")
 
+set(SIMD_ARCHS "ARCH_X86_AVX2;ARCH_X86_SSE4_1" CACHE STRING "semi-colon seperated list of of libsimdpp interface libraries (e.g. ARCH_X86_AVX2;ARCH_X86_SSE4_1). The alternatives are right now defined in the fork https://github.com/eriksjolund/libsimdpp/commits/modernize_cmake_support")
 
 add_subdirectory(defines-from-cmake-variables)
 add_subdirectory(check-valid-numbers)

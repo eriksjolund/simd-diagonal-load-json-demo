@@ -15,6 +15,7 @@ class DemoPlugin : public QObject, public DemoPluginInterface {
  public:
   ~DemoPlugin() override{};
   QString demo_name() const override;
+  QString simd_arch() const override;
   unsigned num_loads() const override;
   unsigned num_vertical_mixing() const override;
   unsigned num_vertical_subdivisions() const override;

@@ -10,6 +10,7 @@ class DemoPluginInterface {
   virtual ~DemoPluginInterface() {}
 
   virtual QString demo_name() const = 0;
+  virtual QString simd_arch() const = 0;
   virtual unsigned num_loads() const = 0;
   virtual unsigned num_vertical_mixing() const = 0;
   virtual unsigned num_vertical_subdivisions() const = 0;

@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QtPlugin>
+#include <QString>
 
 #include <simd-diagonal-load-json-demo/defines-from-cmake-variables/config.h>
 #include <simd-diagonal-load-json-demo/demo-plugin-interface/demo_plugin_interface.h>
@@ -13,7 +14,8 @@
 #include <simd-diagonal-load-json-demo/protobuf-helper-funcs/json_input_from_stdin.h>
 
 const char* command_line_usage_string() {
-  return "Usage: demo num_loads num_vertical_mixing\n\n"
+  return "Usage: demo simd_arch num_loads num_vertical_mixing\n\n"
+         "simd_arch    For instance ARCH_X86_SSE4 or ARCH_X86_AVX2\n   (defined in https://github.com/eriksjolund/libsimdpp/tree/modernize_cmake_support)\n"
          "num_vertical    an integer number greater than or equal to 1.\n"
          "                 1 means no mixing. To get \"full mixing\" specify \n"
          "the number of matrices in the JSON input.\n\n"
@@ -32,9 +34,10 @@ int main(int argc, char** argv) {
                    "execute with --help flag\n";
       return EXIT_FAILURE;
     }
-    case 3: {
-      unsigned num_loads = atoi(argv[1]);
-      unsigned num_vertical_mixing = atoi(argv[2]);
+    case 4: {
+      const QString simd_arch{argv[1]};
+      unsigned num_loads = atoi(argv[2]);
+      unsigned num_vertical_mixing = atoi(argv[3]);
       QDir plugin_dir(PLUGIN_INSTALL_DIR);
       if (!plugin_dir.exists()) {
         throw std::runtime_error("The plugin dir does not exist");
@@ -45,7 +48,8 @@ int main(int argc, char** argv) {
            plugin_dir.entryInfoList(QStringList{} << "lib*.so",
                                     QDir::NoDotAndDotDot | QDir::Files)) {
         DemoPluginLoader loader(fileinfo.absoluteFilePath());
-        if (loader.demo_plugin().num_loads() == num_loads &&
+        if (loader.demo_plugin().simd_arch() == simd_arch &&
+            loader.demo_plugin().num_loads() == num_loads &&
             loader.demo_plugin().num_vertical_mixing() == num_vertical_mixing &&
             loader.demo_plugin().num_vertical_subdivisions() ==
                 input_root.spec().num_vertical_subdivisions() &&

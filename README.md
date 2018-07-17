@@ -47,7 +47,7 @@ With the help of the command-line tool [jq](https://stedolan.github.io/jq/) the 
 
 The included command-line tool __demo__ performs the algortihm and prints out the result to stdout
 
-    user@ubuntu:~$ cat /tmp/input.json | demo 1 1 | jq -c '[.result.matrices[0].diagonals[] | [.elements[].element]][]' 
+    user@ubuntu:~$ cat /tmp/input.json | demo ARCH_X86_AVX2 1 1 | jq -c '[.result.matrices[0].diagonals[] | [.elements[].element]][]' 
     ["0",null,null,null,null,null,null,null]
     ["8","1",null,null,null,null,null,null]
     ["16","9","2",null,null,null,null,null]
@@ -81,18 +81,15 @@ The easiest way to install simd-diagonal-load-json-demo is by building a Singula
     user@ubuntu:~$ singularity exec /tmp/a3.img generate-input
     Wrong number of arguments. To see command line usage, execute with --help flag
     user@ubuntu:~$ singularity exec /tmp/a3.img generate-input --help
-    Usage: generate-input num_matrices integertype simdvector_bitlength matrix_width
+    Usage: demo simd_arch num_loads num_vertical_mixing
+    
+    simd_arch    For instance ARCH_X86_SSE4 or ARCH_X86_AVX2
+       (defined in https://github.com/eriksjolund/libsimdpp/tree/modernize_cmake_support)
+    num_vertical    an integer number greater than or equal to 1.
+		     1 means no mixing. To get "full mixing" specify
+    the number of matrices in the JSON input.
 
-    integertype choose from: 
-	 uint8_t
-	 uint16_t
-	 uint32_t
-	 uint64_t
-	 int8_t
-	 int16_t
-	 int32_t
-	 int64_t
-
+The JSON input is read from stdin
     user@ubuntu:~$ 
 ```
 
@@ -138,4 +135,5 @@ For __simd-diagonal-load-json-demo__ there are some CMake variables that can be 
 * SIMDVECTOR_BITLENGTH_MAXIMUM
 * MATRIX_WIDTH_MINIMUM
 * MATRIX_WIDTH_MAXIMUM
-* INTEGERTYPES
+* INTEGERTYPES    (a semi-colon separated list of integer types, e.g. "uint8_t;int32_t")
+* SIMD_ARCHS   (a semi-colon separated list of SIMD architectures, e.g. "ARCH_X86_AVX2;ARCH_X86_SSE4_1")

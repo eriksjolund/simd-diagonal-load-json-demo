@@ -12,6 +12,11 @@ QString DemoPlugin::demo_name() const {
   return QString(PLUGIN_NAME);
 }
 
+QString DemoPlugin::simd_arch() const {
+
+  return QString( preprocessor_str(SIMD_ARCH) );
+}
+
 unsigned DemoPlugin::num_loads() const {
   return NUM_LOADS;
 }
