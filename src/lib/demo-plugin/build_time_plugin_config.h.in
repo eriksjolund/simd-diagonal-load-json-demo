@@ -1,0 +1,17 @@
+#ifndef BUILD_TIME_PLUGIN_CONFIG_H
+#define BUILD_TIME_PLUGIN_CONFIG_H
+
+#include <simd-diagonal-load/algorithm/algorithm_types.h>
+
+namespace build_time_plugin_config {
+  const char *plugin_name = "@plugin_name@";
+  const char *simd_arch = "@argument_SIMD_ARCH@";
+  const char *integertype = "@argument_INTEGERTYPE@";
+  const num_loads_t num_loads = @argument_NUM_LOADS@;
+  const num_vertical_mixing_t num_vertical_mixing = @argument_NUM_VERTICAL_MIXING@;
+  const num_vertical_subdivisions_t num_vertical_subdivisions = @argument_NUM_VERTICAL_SUBDIVISIONS@;
+  const unsigned simdvector_bitlength = @argument_SIMDVECTOR_BITLENGTH@;
+  const unsigned matrix_width = @argument_MATRIX_WIDTH@;
+} 
+
+#endif  // BUILD_TIME_PLUGIN_CONFIG_H
