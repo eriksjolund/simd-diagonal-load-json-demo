@@ -1,0 +1,7 @@
+{
+  "numMatrices" : 1,
+  "matrixWidth" : 8,
+  "matrixHeight" : 16,
+  "minValue" : 0,
+ "maxValue" : 222
+}
