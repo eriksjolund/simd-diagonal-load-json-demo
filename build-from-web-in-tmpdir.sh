@@ -10,18 +10,17 @@ ninja -v
 ninja install
 }
 
-srcdir=/tmp/tmp.RYzllu7xyD
-if /bin/false; then
-  srcdir=`mktemp -d`
-  cd $srcdir
 
-  git clone https://github.com/eriksjolund/simd-diagonal-load.git
-  git -C simd-diagonal-load checkout rearrange
-  git clone https://github.com/eriksjolund/simd-diagonal-load-json-demo.git
-  git clone https://github.com/eriksjolund/libsimdpp.git
-  git -C libsimdpp checkout modernize_cmake_support 
-  git clone https://github.com/capnproto/capnproto.git
-fi
+srcdir=`mktemp -d`
+cd $srcdir
+
+git clone https://github.com/eriksjolund/simd-diagonal-load.git
+git -C simd-diagonal-load checkout rearrange
+git clone https://github.com/eriksjolund/simd-diagonal-load-json-demo.git
+git clone https://github.com/eriksjolund/libsimdpp.git
+git -C libsimdpp checkout modernize_cmake_support 
+git clone https://github.com/capnproto/capnproto.git
+
 installdir=`mktemp -d`
 
 export LD_LIBRARY_PATH="$installdir/lib:$LD_LIBRARY_PATH"
@@ -33,4 +32,4 @@ build_and_install $srcdir $installdir capnproto
 build_and_install $srcdir $installdir simd-diagonal-load
 build_and_install $srcdir $installdir simd-diagonal-load-json-demo
 
-echo LD_LIBRARY_PATH=\"$installdir/lib:\$LD_LIBRARY_PATH\" PATH=\"$installdir/bin:\$PATH\" generate-input --spec examples/example1/inputspec.json "|" LD_LIBRARY_PATH=\"$installdir/lib:\$LD_LIBRARY_PATH\" PATH=\"$installdir/bin:\$PATH\" demo --conf examples/example1/demo-options.json | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]'
+echo LD_LIBRARY_PATH=\"$installdir/lib:\$LD_LIBRARY_PATH\" PATH=\"$installdir/bin:\$PATH\" generate-input --spec examples/example1/inputspec.json "|" LD_LIBRARY_PATH=\"$installdir/lib:\$LD_LIBRARY_PATH\" PATH=\"$installdir/bin:\$PATH\" demo --conf examples/example1/demo-options.json "|" jq -c \'[.matrices[0].diagonals[] "|" [.elements[].value]][]\'

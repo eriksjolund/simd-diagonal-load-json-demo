@@ -89,7 +89,7 @@ The last line printed in the previous command shows the command of how to run th
 
 ```
 
-    user@ubuntu:~/simd-diagonal-load-json-demo$ LD_LIBRARY_PATH="/tmp/tmp.tcAUj7g6ha/lib:$LD_LIBRARY_PATH" PATH="/tmp/tmp.tcAUj7g6ha/bin:$PATH" generate-input --spec options3.json | LD_LIBRARY_PATH="/tmp/tmp.tcAUj7g6ha/lib:$LD_LIBRARY_PATH" PATH="/tmp/tmp.tcAUj7g6ha/bin:$PATH" demo --conf demo-run-options3.json| jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]'
+    user@ubuntu:~/simd-diagonal-load-json-demo$ LD_LIBRARY_PATH="/tmp/tmp.tb4tsLAGHO/lib:$LD_LIBRARY_PATH" PATH="/tmp/tmp.tb4tsLAGHO/bin:$PATH" generate-input --spec examples/example1/inputspec.json | LD_LIBRARY_PATH="/tmp/tmp.tb4tsLAGHO/lib:$LD_LIBRARY_PATH" PATH="/tmp/tmp.tb4tsLAGHO/bin:$PATH" demo --conf examples/example1/demo-options.json | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]'
     ["0",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]
     ["16","1",null,null,null,null,null,null,null,null,null,null,null,null,null,null]
     ["32","17","2",null,null,null,null,null,null,null,null,null,null,null,null,null]
