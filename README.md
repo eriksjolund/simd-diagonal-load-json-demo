@@ -47,7 +47,7 @@ With the help of the command-line tool [jq](https://stedolan.github.io/jq/) the 
 
 The included command-line tool __demo__ performs the algortihm and prints out the result to stdout
 
-    user@ubuntu:~$ cat /tmp/input.json | demo ARCH_X86_AVX2 1 1 | jq -c '[.result.matrices[0].diagonals[] | [.elements[].element]][]' 
+    user@ubuntu:~$ cat /tmp/input.json | demo ARCH_X86_AVX2 1 1 | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]' 
     ["0",null,null,null,null,null,null,null]
     ["8","1",null,null,null,null,null,null]
     ["16","9","2",null,null,null,null,null]
@@ -66,75 +66,55 @@ The included command-line tool __demo__ performs the algortihm and prints out th
     user@ubuntu:~
 
 # Installation
-## Installation by building a Singularity container
 
-The easiest way to install simd-diagonal-load-json-demo is by building a Singularity container.
+## Installation on Ubuntu 18.10
 
-```
-    sudo apt-get install singularity-container
-    git clone https://github.com/eriksjolund/simd-diagonal-load-json-demo.git
-    sudo singularity build -w /tmp/container.img simd-diagonal-load-json-demo/Singularity.debian
-```
 
-### Running simd-diagonal-load-json-demo commands in the Singularity container
+Install requirements
 
 ```
-    user@ubuntu:~$ singularity exec /tmp/a3.img generate-input
-    Wrong number of arguments. To see command line usage, execute with --help flag
-    user@ubuntu:~$ singularity exec /tmp/a3.img generate-input --help
-    Usage: demo simd_arch num_loads num_vertical_mixing
-    
-    simd_arch    For instance ARCH_X86_SSE4 or ARCH_X86_AVX2
-       (defined in https://github.com/eriksjolund/libsimdpp/tree/modernize_cmake_support)
-    num_vertical    an integer number greater than or equal to 1.
-		     1 means no mixing. To get "full mixing" specify
-    the number of matrices in the JSON input.
-
-The JSON input is read from stdin
-    user@ubuntu:~$ 
+    user@ubuntu:~$ sudo apt-get install jq libqt5core5a qtbase5-dev cmake g++ qtbase5-dev ninja-build
 ```
 
-## Traditional installation
-
-Instead of installing __simd-diagonal-load-json-demo__ into a Singularity container
-you could of course install  __simd-diagonal-load-json-demo__ in the traditional way directly into your system.
-Here is a sketch of how to do it:
-
-First install the requirements.
-
-On Ubuntu the commands are:
+To build and install into /tmp run the script
 
 ```
-    sudo apt-get install protobuf-c-compiler protobuf-compiler ninja-build
-    sudo apt-get install libprotobuf-dev qtbase5-dev git build-essential jq
-```
 
-Then download a new CMake executable (version >= 3.11.4) from cmake.org.
-
-Download source code for the dependencies 
+    user@ubuntu:~$ cd simd-diagonal-load-json-demo
+    user@ubuntu:~/simd-diagonal-load-json-demo$ sh build-from-web-in-tmpdir.sh
 
 ```
-    git clone https://github.com/eriksjolund/libsimdpp.git
-    git clone https://github.com/eriksjolund/simd-diagonal-load.git
-    git -C libsimdpp checkout modernize_cmake_support
+
+The last line printed in the previous command shows the command of how to run the [examples/example1](examples/example1). Cut and paste it into the terminal and press enter
+
 ```
 
-After that perfom a standard CMake installation. First __libsimdpp__, then __simd-diagonal-load__ and
-finally __simd-diagonal-load-json-demo__ .
+    user@ubuntu:~/simd-diagonal-load-json-demo$ LD_LIBRARY_PATH="/tmp/tmp.tcAUj7g6ha/lib:$LD_LIBRARY_PATH" PATH="/tmp/tmp.tcAUj7g6ha/bin:$PATH" generate-input --spec options3.json | LD_LIBRARY_PATH="/tmp/tmp.tcAUj7g6ha/lib:$LD_LIBRARY_PATH" PATH="/tmp/tmp.tcAUj7g6ha/bin:$PATH" demo --conf demo-run-options3.json| jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]'
+    ["0",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]
+    ["16","1",null,null,null,null,null,null,null,null,null,null,null,null,null,null]
+    ["32","17","2",null,null,null,null,null,null,null,null,null,null,null,null,null]
+    ["48","33","18","3",null,null,null,null,null,null,null,null,null,null,null,null]
+    ["64","49","34","19","4",null,null,null,null,null,null,null,null,null,null,null]
+    ["80","65","50","35","20","5",null,null,null,null,null,null,null,null,null,null]
+    ["96","81","66","51","36","21","6",null,null,null,null,null,null,null,null,null]
+    ["112","97","82","67","52","37","22","7",null,null,null,null,null,null,null,null]
+    [null,"113","98","83","68","53","38","23","8",null,null,null,null,null,null,null]
+    [null,null,"114","99","84","69","54","39","24","9",null,null,null,null,null,null]
+    [null,null,null,"115","100","85","70","55","40","25","10",null,null,null,null,null]
+    [null,null,null,null,"116","101","86","71","56","41","26","11",null,null,null,null]
+    [null,null,null,null,null,"117","102","87","72","57","42","27","12",null,null,null]
+    [null,null,null,null,null,null,"118","103","88","73","58","43","28","13",null,null]
+    [null,null,null,null,null,null,null,"119","104","89","74","59","44","29","14",null]
+    [null,null,null,null,null,null,null,null,"120","105","90","75","60","45","30","15"]
+    [null,null,null,null,null,null,null,null,null,"121","106","91","76","61","46","31"]
+    [null,null,null,null,null,null,null,null,null,null,"122","107","92","77","62","47"]
+    [null,null,null,null,null,null,null,null,null,null,null,"123","108","93","78","63"]
+    [null,null,null,null,null,null,null,null,null,null,null,null,"124","109","94","79"]
+    [null,null,null,null,null,null,null,null,null,null,null,null,null,"125","110","95"]
+    [null,null,null,null,null,null,null,null,null,null,null,null,null,null,"126","111"]
+    [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"127"]
+    user@ubuntu:~/simd-diagonal-load-json-demo$ 
 
-For __simd-diagonal-load-json-demo__ there are some CMake variables that can be adjusted:
 
-* NUM_LOADS_MINIMUM
-* NUM_LOADS_MAXIMUM
-* NUM_MATRICES_MINIMUM
-* NUM_MATRICES_MAXIMUM
-* NUM_VERTICAL_MIXING_MINIMUM
-* NUM_VERTICAL_MIXING_MAXIMUM
-* NUM_VERTICAL_SUBDIVISIONS_MINIMUM
-* NUM_VERTICAL_SUBDIVISIONS_MAXIMUM
-* SIMDVECTOR_BITLENGTH_MINIMUM
-* SIMDVECTOR_BITLENGTH_MAXIMUM
-* MATRIX_WIDTH_MINIMUM
-* MATRIX_WIDTH_MAXIMUM
-* INTEGERTYPES    (a semi-colon separated list of integer types, e.g. "uint8_t;int32_t")
-* SIMD_ARCHS   (a semi-colon separated list of SIMD architectures, e.g. "ARCH_X86_AVX2;ARCH_X86_SSE4_1")
+```
+
