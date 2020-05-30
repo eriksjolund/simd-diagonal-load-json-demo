@@ -1,0 +1,53 @@
+FROM docker.io/library/fedora:32 AS runtimedeps
+
+RUN mkdir -p /installroot
+RUN dnf install \
+      --releasever 32 \
+      --installroot /installroot \
+      --setopt install_weak_deps=false \
+      --nodocs \
+      -y \
+      coreutils-single \
+      glibc-minimal-langpack \
+      qt5-qtbase \
+      capnproto && \
+    dnf clean --installroot /installroot all
+
+FROM docker.io/library/fedora:32 AS builder
+
+RUN dnf -y update && \
+  dnf -y install \
+    capnproto \
+    capnproto-devel \
+    cmake \
+    findutils \
+    gcc-g++ \
+    git \
+    ninja-build \
+    qt5-qtbase \
+    qt5-qtbase-devel && \
+  dnf clean all
+
+WORKDIR /build
+RUN git clone https://github.com/eriksjolund/libsimdpp.git && \
+    git -C libsimdpp checkout modernize_cmake_support && \
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app -B build1 -S libsimdpp/cmake/simd-compile-options && \
+    cmake --build build1 --target install && \
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app -DCMAKE_PREFIX_PATH=/app -B build2 -S libsimdpp && \
+    cmake -G Ninja -B build2 -S libsimdpp && \
+    cmake --build build2 --target install && \
+    git clone https://github.com/eriksjolund/simd-diagonal-load.git && \
+    git -C simd-diagonal-load checkout rearrange && \
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app p -DCMAKE_PREFIX_PATH=/app -B build3 -S simd-diagonal-load && \
+    cmake --build build3 --target install && \
+    git clone https://github.com/eriksjolund/simd-diagonal-load-json-demo.git && \
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app p -DCMAKE_PREFIX_PATH=/app -B build4 -S simd-diagonal-load-json-demo && \
+    cmake -G Ninja -B build4 -S simd-diagonal-load-json-demo && \
+    cmake --build build4 --target install
+
+FROM scratch
+COPY --from=runtimedeps /installroot/ /
+COPY --from=builder /app /app
+ENV LD_LIBRARY_PATH=/app/lib:$LD_LIBRARY_PATH \
+    PATH=/app/bin:$PATH
+CMD /bin/sh
