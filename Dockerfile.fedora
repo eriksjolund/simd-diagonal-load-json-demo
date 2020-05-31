@@ -7,10 +7,11 @@ RUN dnf install \
       --setopt install_weak_deps=false \
       --nodocs \
       -y \
+      capnproto \
       coreutils-single \
       glibc-minimal-langpack \
-      qt5-qtbase \
-      capnproto && \
+      jq \
+      qt5-qtbase && \
     dnf clean --installroot /installroot all
 
 FROM docker.io/library/fedora:32 AS builder

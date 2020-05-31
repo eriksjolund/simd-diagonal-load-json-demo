@@ -34,7 +34,8 @@ RUN apk add --no-cache \
     apk add --no-cache \
       -X http://dl-cdn.alpinelinux.org/alpine/edge/testing \
       capnproto \
-      capnproto-dev
+      capnproto-dev \
+      jq
 COPY --from=builder /app /app
 CMD /bin/sh
 ENV LD_LIBRARY_PATH=/app/lib:$LD_LIBRARY_PATH \
