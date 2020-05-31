@@ -28,13 +28,24 @@ https://stackoverflow.com/questions/15198011/how-to-load-a-sliding-diagonal-vect
 
 ## Quick demonstration
 
+### Run via Container
+
+```
+$ alias generate-input="podman run --rm docker.io/eriksjolund/simd-diagonal-load-json-demo:latest generate-input"
+$ alias demo="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest demo"
+$ alias jq="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest jq"
+```
+
+
+
+
 Generate some input with the included command-line tool __generate-input__ 
 
-    user@ubuntu:~$ generate-input 1 int32_t 256 8 > /tmp/input.json
+    $ generate-input 1 int32_t 256 8 > /tmp/input.json
 
 With the help of the command-line tool [jq](https://stedolan.github.io/jq/) the JSON input can displayed like this
 
-    user@ubuntu:~$ cat /tmp/input.json | jq -c '[.matrices[0] | .columns[].elements][]'
+    $ cat /tmp/input.json | jq -c '[.matrices[0] | .columns[].elements][]'
     ["0","1","2","3","4","5","6","7"]
     ["8","9","10","11","12","13","14","15"]
     ["16","17","18","19","20","21","22","23"]
@@ -47,7 +58,7 @@ With the help of the command-line tool [jq](https://stedolan.github.io/jq/) the 
 
 The included command-line tool __demo__ performs the algortihm and prints out the result to stdout
 
-    user@ubuntu:~$ cat /tmp/input.json | demo ARCH_X86_AVX2 1 1 | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]' 
+    $ cat /tmp/input.json | demo ARCH_X86_AVX2 1 1 | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]' 
     ["0",null,null,null,null,null,null,null]
     ["8","1",null,null,null,null,null,null]
     ["16","9","2",null,null,null,null,null]
