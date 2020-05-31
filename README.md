@@ -28,7 +28,10 @@ https://stackoverflow.com/questions/15198011/how-to-load-a-sliding-diagonal-vect
 
 ## Quick demonstration
 
-### Run via Container
+### Run via OCI Container
+
+An [OCI](https://opencontainers.org/) Container of simd-diagonal-load-json-demo is
+available on Dockerhub.
 
 ```
 $ alias generate-input="podman run --rm docker.io/eriksjolund/simd-diagonal-load-json-demo:latest generate-input"
@@ -36,8 +39,7 @@ $ alias demo="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-d
 $ alias jq="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest jq"
 ```
 
-
-
+(In case you want to run `docker`, just replace `podman` with `docker` in the commands above)
 
 Generate some input with the included command-line tool __generate-input__ 
 
