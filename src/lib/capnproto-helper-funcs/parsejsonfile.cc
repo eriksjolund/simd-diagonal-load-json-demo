@@ -4,6 +4,7 @@
 #include <simd-diagonal-load-json-demo/capnproto-helper-funcs/parsejsonfile.h>
 
 #include <kj/std/iostream.h>
+#include <kj/io.h>
 
 void parseJsonFile(char* filepath, capnp::DynamicStruct::Builder builder) {
   // Probably not the most efficient implementation.
@@ -15,9 +16,10 @@ void parseJsonFile(char* filepath, capnp::DynamicStruct::Builder builder) {
   codec.decode(kjstr, builder);
 }
 
-void parseJsonStdin(capnp::DynamicStruct::Builder builder) {
-  std::string str(std::istreambuf_iterator<char>{std::cin}, {});
-  kj::StringPtr kjstr(str.c_str());
+void parseJsonFileDescriptor(int fd, capnp::DynamicStruct::Builder builder) {
+  kj::FdInputStream input_stream(fd);
+  uint64_t max_bytes_limit = 1024*1024*1024; // 1 Gb (arbitrarily chosen)
+  kj::String str = input_stream.readAllText(max_bytes_limit);
   capnp::JsonCodec codec;
-  codec.decode(kjstr, builder);
+  codec.decode(str, builder);
 }

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <cassert>
+#include <unistd.h>
 #include <QCoreApplication>
 #include <QDebug>
 #include <QDir>
@@ -13,8 +14,6 @@
 #include <simd-diagonal-load-json-demo/defines-from-cmake-variables/config.h>
 #include <simd-diagonal-load-json-demo/demo-plugin-interface/demo_plugin_interface.h>
 #include <simd-diagonal-load-json-demo/demo-pluginloader/demo_pluginloader.h>
-//#include
-//<simd-diagonal-load-json-demo/capnproto-helper-funcs/json_input_from_stdin.h>
 #include <simd-diagonal-load-json-demo/capnproto-helper-funcs/parsejsonfile.h>
 #include <simd-diagonal-load-json-demo/demo-run-options/demo-run-options.capnp.h>
 
@@ -95,11 +94,10 @@ int main(int argc, char** argv) {
           auto options_reader = root.asReader();
           capnp::MallocMessageBuilder message2;
           auto root2 = message2.initRoot<InputMatricesRoot>();
-          parseJsonStdin(root2);
+          parseJsonFileDescriptor(STDIN_FILENO, root2);
           auto input_matrices_reader = root2.asReader();
           run_demo(options_reader, input_matrices_reader,
                    QDir(plugin_dir_path));
-
         } catch (const std::ifstream::failure& e) {
           std::cerr << "std::ifstream::failure=" << e.what() << std::endl;
           return_value = EXIT_FAILURE;
