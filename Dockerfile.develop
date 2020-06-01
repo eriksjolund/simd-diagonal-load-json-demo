@@ -1,0 +1,24 @@
+FROM docker.io/library/fedora:32 as installdevelop
+
+RUN mkdir -p /installroot
+RUN dnf install \
+      --releasever 32 \
+      --installroot /installroot \
+      --setopt install_weak_deps=false \
+      --nodocs \
+      -y \
+      cmake \
+      coreutils-single \
+      findutils \
+      gcc-g++ \
+      git \
+      glibc-minimal-langpack \
+      jq \
+      ninja-build \
+      qt5-qtbase \
+      qt5-qtbase-devel && \
+    dnf clean --installroot /installroot all
+
+FROM scratch
+COPY --from=installdevelop /installroot/ /
+CMD /bin/sh

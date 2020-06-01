@@ -7,7 +7,6 @@ RUN dnf install \
       --setopt install_weak_deps=false \
       --nodocs \
       -y \
-      capnproto \
       coreutils-single \
       glibc-minimal-langpack \
       jq \
@@ -18,8 +17,6 @@ FROM docker.io/library/fedora:32 AS builder
 
 RUN dnf -y update && \
   dnf -y install \
-    capnproto \
-    capnproto-devel \
     cmake \
     findutils \
     gcc-g++ \
@@ -34,21 +31,23 @@ RUN git clone https://github.com/eriksjolund/libsimdpp.git && \
     git -C libsimdpp checkout modernize_cmake_support && \
     cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app -B build1 -S libsimdpp/cmake/simd-compile-options && \
     cmake --build build1 --target install && \
-    cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app -DCMAKE_PREFIX_PATH=/app -B build2 -S libsimdpp && \
-    cmake -G Ninja -B build2 -S libsimdpp && \
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app -DCMAKE_PREFIX_PATH=/app -DBUILD_SHARED_LIBS=on -B build2 -S libsimdpp && \
     cmake --build build2 --target install && \
+    git clone https://github.com/capnproto/capnproto.git && \
+    git -C capnproto checkout v0.8.0 && \
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app p -DCMAKE_PREFIX_PATH=/app -DBUILD_SHARED_LIBS=on -B build3 -S capnproto && \
+    cmake --build build3 --target install && \
     git clone https://github.com/eriksjolund/simd-diagonal-load.git && \
     git -C simd-diagonal-load checkout rearrange && \
-    cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app p -DCMAKE_PREFIX_PATH=/app -B build3 -S simd-diagonal-load && \
-    cmake --build build3 --target install && \
+    cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app -DCMAKE_PREFIX_PATH=/app -DBUILD_SHARED_LIBS=on -B build4 -S simd-diagonal-load && \
+    cmake --build build4 --target install && \
     git clone https://github.com/eriksjolund/simd-diagonal-load-json-demo.git && \
-    cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app p -DCMAKE_PREFIX_PATH=/app -B build4 -S simd-diagonal-load-json-demo && \
-    cmake -G Ninja -B build4 -S simd-diagonal-load-json-demo && \
-    cmake --build build4 --target install
+    PATH=/app/bin:$PATH LD_LIBRARY_PATH=/app/lib64:$LD_LIBRARY_PATH cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/app -DCMAKE_PREFIX_PATH=/app -DBUILD_SHARED_LIBS=on -B build5 -S simd-diagonal-load-json-demo && \
+    PATH=/app/bin:$PATH LD_LIBRARY_PATH=/app/lib64:$LD_LIBRARY_PATH cmake --build build5 --target install
 
 FROM scratch
 COPY --from=runtimedeps /installroot/ /
 COPY --from=builder /app /app
-ENV LD_LIBRARY_PATH=/app/lib:$LD_LIBRARY_PATH \
+ENV LD_LIBRARY_PATH=/app/lib:/app/lib64:$LD_LIBRARY_PATH \
     PATH=/app/bin:$PATH
 CMD /bin/sh
