@@ -33,17 +33,18 @@ https://stackoverflow.com/questions/15198011/how-to-load-a-sliding-diagonal-vect
 An [OCI](https://opencontainers.org/) Container of simd-diagonal-load-json-demo is
 available on Dockerhub.
 
+First define some bash aliases
 ```
-$ alias generate-input="podman run --rm docker.io/eriksjolund/simd-diagonal-load-json-demo:latest generate-input"
-$ alias demo="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest demo"
-$ alias jq="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest jq"
+alias generate-input="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest generate-input"
+alias demo="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest demo"
+alias jq="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest jq"
 ```
 
 (In case you want to run `docker`, just replace `podman` with `docker` in the commands above)
 
 Generate some input with the included command-line tool __generate-input__ 
 
-    $ generate-input 1 int32_t 256 8 > /tmp/input.json
+    $ cat simd-diagonal-load-json-demo/examples/example1/inputspec.json | generate-input > /tmp/input.json
 
 With the help of the command-line tool [jq](https://stedolan.github.io/jq/) the JSON input can displayed like this
 
@@ -56,7 +57,6 @@ With the help of the command-line tool [jq](https://stedolan.github.io/jq/) the 
     ["40","41","42","43","44","45","46","47"]
     ["48","49","50","51","52","53","54","55"]
     ["56","57","58","59","60","61","62","63"]
-
 
 The included command-line tool __demo__ performs the algortihm and prints out the result to stdout
 
