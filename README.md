@@ -36,7 +36,7 @@ available on Dockerhub.
 First define some bash aliases
 ```
 alias generate-input="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest generate-input"
-alias demo="podman run --rm -i -v simd-diagonal-load-json-demo/examples:/examples:Z docker.io/eriksjolund/simd-diagonal-load-json-demo:latest demo"
+alias demo="podman run --rm -i -v simd-diagonal-load-json-demo/examples:/examples:ro docker.io/eriksjolund/simd-diagonal-load-json-demo:latest demo"
 alias jq="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest jq"
 ```
 
