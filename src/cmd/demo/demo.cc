@@ -29,8 +29,10 @@ const char* command_line_usage_string() {
   return "Usage: demo --help\n"
          "       demo --options-file JSONFILE\n\n"
          "OPTIONS\n"
-         "    -h, --help    show help\n"
-         "    -c, --conf FILE   file path to run options in JSON format\n";
+         "    -h, --help    show help\n\n"
+         "Without any arguments, demo will read input_matrices\n"
+         "on stdin (file descriptor 0) and the options_file on file\n"
+         "descriptor 3";
 }
 
 void run_demo(const DemoRunOptions::Reader& run_options,
@@ -79,40 +81,38 @@ int main(int argc, char** argv) {
   int return_value = EXIT_SUCCESS;
 
   switch (argc) {
+    case 1: {
+      try {
+        capnp::MallocMessageBuilder message;
+        auto root = message.initRoot<DemoRunOptions>();
+        parseJsonFileDescriptor(3, root);
+        auto options_reader = root.asReader();
+        capnp::MallocMessageBuilder message2;
+        auto root2 = message2.initRoot<InputMatricesRoot>();
+        parseJsonFileDescriptor(STDIN_FILENO, root2);
+        auto input_matrices_reader = root2.asReader();
+        run_demo(options_reader, input_matrices_reader,
+                 QDir(plugin_dir_path));
+      } catch (const std::ifstream::failure& e) {
+        std::cerr << "std::ifstream::failure=" << e.what() << std::endl;
+        return_value = EXIT_FAILURE;
+      } catch (const std::runtime_error& e) {
+        std::cerr << "std::runtime_error = " << e.what() << std::endl;
+        return_value = EXIT_FAILURE;
+      } catch (const std::exception& e) {
+        std::cerr << "error: std::exception :" << e.what() << std::endl;
+        return_value = EXIT_FAILURE;
+      } catch (...) {
+        std::cerr << "error: unknown exception thrown" << std::endl;
+        return_value = EXIT_FAILURE;
+      }
+      break;
+    }
     case 2: {
       if ((strcmp(argv[1], "--help") == 0) || (strcmp(argv[1], "-h") == 0)) {
         std::cout << command_line_usage_string() << std::endl;
       }
       break;
-    }
-    case 3: {
-      if ((strcmp(argv[1], "--conf") == 0) || (strcmp(argv[1], "-c") == 0)) {
-        try {
-          capnp::MallocMessageBuilder message;
-          auto root = message.initRoot<DemoRunOptions>();
-          parseJsonFile(argv[2], root);
-          auto options_reader = root.asReader();
-          capnp::MallocMessageBuilder message2;
-          auto root2 = message2.initRoot<InputMatricesRoot>();
-          parseJsonFileDescriptor(STDIN_FILENO, root2);
-          auto input_matrices_reader = root2.asReader();
-          run_demo(options_reader, input_matrices_reader,
-                   QDir(plugin_dir_path));
-        } catch (const std::ifstream::failure& e) {
-          std::cerr << "std::ifstream::failure=" << e.what() << std::endl;
-          return_value = EXIT_FAILURE;
-        } catch (const std::runtime_error& e) {
-          std::cerr << "std::runtime_error = " << e.what() << std::endl;
-          return_value = EXIT_FAILURE;
-        } catch (const std::exception& e) {
-          std::cerr << "error: std::exception :" << e.what() << std::endl;
-          return_value = EXIT_FAILURE;
-        } catch (...) {
-          std::cerr << "error: unknown exception thrown" << std::endl;
-          return_value = EXIT_FAILURE;
-        }
-        break;
-      }
     }
     default: {
       std::cerr << "Wrong number of arguments. To see command line usage, "
