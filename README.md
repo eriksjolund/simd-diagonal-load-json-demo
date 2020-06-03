@@ -48,6 +48,13 @@ Clone the repository so that you have the input files for the examples available
 $ git clone https://github.com/eriksjolund/simd-diagonal-load-json-demo.git
 ```
 
+In case you use SELINUX (e.g. Fedora, CentOS), relabel the directory _simd-diagonal-load-json-demo/examples_
+so that `podman run` can bind mount and read the files
+
+```
+chcon -R -t container_file_t simd-diagonal-load-json-demo/examples
+```
+
 Generate some input with the included command-line tool __generate-input__ 
 
     $ cat simd-diagonal-load-json-demo/examples/example1/inputspec.json | generate-input > /tmp/input.json
