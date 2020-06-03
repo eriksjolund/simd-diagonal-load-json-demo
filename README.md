@@ -5,7 +5,7 @@ Although simd-diagonal-load was implemented for high performance, simd-diagonal-
 
 ## The problem simd-diagonal-load tries to solve
 
-Sometimes there is a need to iterate with a sliding diagonal SIMD vector over a matrix of values. If the values can just be loaded column-wise, there
+Sometimes there is a need to iterate with a sliding diagonal [SIMD](https://en.wikipedia.org/wiki/SIMD) vector over a matrix of values. If the values can just be loaded column-wise, there
 is a need to somehow shift the values into the sliding diagonal.
 
 A naive implementation could be formulated as:
