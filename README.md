@@ -36,11 +36,17 @@ available on Dockerhub.
 First define some bash aliases
 ```
 alias generate-input="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest generate-input"
-alias demo="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest demo"
+alias demo="podman run --rm -i -v simd-diagonal-load-json-demo/examples:/examples:Z docker.io/eriksjolund/simd-diagonal-load-json-demo:latest demo"
 alias jq="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest jq"
 ```
 
 (In case you want to run `docker`, just replace `podman` with `docker` in the commands above)
+
+Clone the repository so that you have the input files for the examples available.
+
+```
+$ git clone https://github.com/eriksjolund/simd-diagonal-load-json-demo.git
+```
 
 Generate some input with the included command-line tool __generate-input__ 
 
@@ -60,7 +66,7 @@ With the help of the command-line tool [jq](https://stedolan.github.io/jq/) the 
 
 The included command-line tool __demo__ performs the algortihm and prints out the result to stdout
 
-    $ cat /tmp/input.json | demo ARCH_X86_AVX2 1 1 | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]' 
+    $ cat /tmp/input.json | demo -c /examples/example1/demo-options.json | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]' 
     ["0",null,null,null,null,null,null,null]
     ["8","1",null,null,null,null,null,null]
     ["16","9","2",null,null,null,null,null]
