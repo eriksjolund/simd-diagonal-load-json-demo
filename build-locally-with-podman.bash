@@ -33,7 +33,7 @@ build_and_install() {
      podman_run cmake --build $builddir/$1 --target install
 }
 
-if [ ! -d $dependencies_sourcedir/simd-diagonal-load ]; then
+if [ ! -f $dependencies_sourcedir/dependencies_have_been_downloaded ]; then
   git -C $dependencies_sourcedir clone https://github.com/eriksjolund/simd-diagonal-load.git
   git -C $dependencies_sourcedir/simd-diagonal-load checkout rearrange
   git -C $dependencies_sourcedir clone https://github.com/eriksjolund/simd-diagonal-load-json-demo.git
@@ -41,10 +41,11 @@ if [ ! -d $dependencies_sourcedir/simd-diagonal-load ]; then
   git -C $dependencies_sourcedir/libsimdpp checkout modernize_cmake_support 
   git -C $dependencies_sourcedir clone https://github.com/capnproto/capnproto.git
   git -C $dependencies_sourcedir/capnproto checkout v0.8.0
+  touch $dependencies_sourcedir/dependencies_have_been_downloaded
 fi
 
-export LD_LIBRARY_PATH="$installdir/lib:$installdir/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
-export PATH="$installdir/lib${PATH:+:${PATH}}"
+#export LD_LIBRARY_PATH="$installdir/lib:$installdir/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+#export PATH="$installdir/lib${PATH:+:${PATH}}"
 
 build_and_install simd-compile-options "$dependencies_sourcedir/libsimdpp/cmake/simd-compile-options"
 build_and_install libsimdpp "$dependencies_sourcedir/libsimdpp"
@@ -52,4 +53,36 @@ build_and_install capnproto "$dependencies_sourcedir/capnproto"
 build_and_install simd-diagonal-load "$dependencies_sourcedir/simd-diagonal-load"
 build_and_install simd-diagonal-load-json-demo "$simd_diagonal_load_json_demo_sourcedir"
 
-echo cat examples/example1/inputspec.json "|" LD_LIBRARY_PATH=\"$installdir/lib:\$LD_LIBRARY_PATH\" PATH=\"$installdir/bin:\$PATH\" generate-input "|" LD_LIBRARY_PATH=\"$installdir/lib:\$LD_LIBRARY_PATH\" PATH=\"$installdir/bin:\$PATH\" demo --conf examples/example1/demo-options.json "|" jq -c \'[.matrices[0].diagonals[] "|" [.elements[].value]][]\'
+#echo cat examples/example1/inputspec.json "|" LD_LIBRARY_PATH=\"$installdir/lib:\$LD_LIBRARY_PATH\" PATH=\"$installdir/bin:\$PATH\" generate-input "|" LD_LIBRARY_PATH=\"$installdir/lib:\$LD_LIBRARY_PATH\" PATH=\"$installdir/bin:\$PATH\" demo --conf examples/example1/demo-options.json "|" jq -c \'[.matrices[0].diagonals[] "|" [.elements[].value]][]\'
+
+echo "Source these lines to get aliases for generate-input, dem and jq
+
+alias podman_run_alias=\"podman run --rm -i --net=none --security-opt label=disable \
+                --env PATH=$installdir/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+                --env LD_LIBRARY_PATH=$installdir/lib:$installdir/lib64 \
+                --mount=type=bind,src=$dependencies_sourcedir,dst=$dependencies_sourcedir,ro=true \
+                --mount=type=bind,src=$simd_diagonal_load_json_demo_sourcedir,dst=$simd_diagonal_load_json_demo_sourcedir,ro=true \
+                --mount=type=bind,src=$builddir,dst=$builddir,ro=true \
+                --mount=type=bind,src=$installdir,dst=$installdir,ro=true\"
+alias generate-input=\"podman_run_alias localhost/develop generate-input\"
+alias demo=\"podman_run_alias --preserve-fds=1 localhost/develop localhost/develop demo\"
+alias jq=\"podman_run_alias localhost/develop jq\"
+"
+
+
+echo "Source these lines to get aliases for generate-input, dem and jq
+
+alias podman_run_alias=\"podman run -i --network=none --security-opt label=disable \
+                --env PATH=$installdir/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+                --env LD_LIBRARY_PATH=$installdir/lib:$installdir/lib64 \
+                --mount=type=bind,src=$dependencies_sourcedir,dst=$dependencies_sourcedir,ro=true \
+                --mount=type=bind,src=$simd_diagonal_load_json_demo_sourcedir,dst=$simd_diagonal_load_json_demo_sourcedir,ro=true \
+                --mount=type=bind,src=$builddir,dst=$builddir,ro=true \
+                --mount=type=bind,src=$installdir,dst=$installdir,ro=true\"
+
+alias generate-input=\"podman_run_alias localhost/develop generate-input\"
+alias demo=\"podman exec --preserve-fds=1 democont demo\"
+alias jq=\"podman_run_alias localhost/develop jq\"
+
+alias demorun=\"podman_run_alias -d --name democont localhost/develop sleep 100000\"
+"

@@ -43,28 +43,15 @@ bash simd-diagonal-load-json-demo/build-locally-with-podman.bash ~/simd-diagonal
 
 ## Run the new build with example input data
 
+The last lines printed to stdout in the previous command defines some aliases:
 
+* generate-input
+* demo
+* jq
+* demorun
 
-The last line printed in the previous command shows the command of how to run the [examples/example1](examples/example1). Cut and paste it into the terminal and press enter
+Copy-paste those lines into the bash shell.
 
-```
-user@fedora:~/simd-diagonal-load-json-demo$ LD_LIBRARY_PATH="/tmp/tmp.tb4tsLAGHO/lib:$LD_LIBRARY_PATH" PATH="/tmp/tmp.tb4tsLAGHO/bin:$PATH" generate-input --spec examples/example1/inputspec.json | LD_LIBRARY_PATH="/tmp/tmp.tb4tsLAGHO/lib:$LD_LIBRARY_PATH" PATH="/tmp/tmp.tb4tsLAGHO/bin:$PATH" demo 3< examples/example1/demo-options.json | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]'
-["0",null,null,null,null,null,null,null]
-["8","1",null,null,null,null,null,null]
-["16","9","2",null,null,null,null,null]
-["24","17","10","3",null,null,null,null]
-["32","25","18","11","4",null,null,null]
-["40","33","26","19","12","5",null,null]
-["48","41","34","27","20","13","6",null]
-["56","49","42","35","28","21","14","7"]
-[null,"57","50","43","36","29","22","15"]
-[null,null,"58","51","44","37","30","23"]
-[null,null,null,"59","52","45","38","31"]
-[null,null,null,null,"60","53","46","39"]
-[null,null,null,null,null,"61","54","47"]
-[null,null,null,null,null,null,"62","55"]
-[null,null,null,null,null,null,null,"63"]
-user@fedora:~/simd-diagonal-load-json-demo$ 
-
-
-```
+`demorun` is a work-around until podman 2.1.0 has been released. (Assuming that podman release will have support for `podman run --preserved-fds`).
+Run `demorun` once to start a running container.
+After that the alias `demo` will work.
