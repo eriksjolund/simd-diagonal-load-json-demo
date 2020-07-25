@@ -26,21 +26,19 @@ for (int i=0; i < width - 16; ++i) {
 
 https://stackoverflow.com/questions/15198011/how-to-load-a-sliding-diagonal-vector-from-data-stored-column-wise-withsse
 
-## Quick demonstration
-
-### Run via OCI Container
+## Run simd-diagonal-load-json-demo in container
 
 An [OCI](https://opencontainers.org/) Container of simd-diagonal-load-json-demo is
 available on Dockerhub.
 
+__Requirements__: podman version ? or higher. Right now it's a bit unclear if `podman run --preserve-fds` is available or not (see https://github.com/containers/podman/issues/6458).
+
 First define some bash aliases
 ```
 alias generate-input="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest generate-input"
-alias demo="podman run --rm -i -v ./simd-diagonal-load-json-demo/examples:/examples:ro docker.io/eriksjolund/simd-diagonal-load-json-demo:latest demo"
+alias demo="podman run --rm -i --preserve-fds=1 docker.io/eriksjolund/simd-diagonal-load-json-demo:latest demo"
 alias jq="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest jq"
 ```
-
-(In case you want to run `docker`, just replace `podman` with `docker` in the commands above)
 
 Clone the repository so that you have the input files for the examples available.
 
@@ -48,31 +46,36 @@ Clone the repository so that you have the input files for the examples available
 $ git clone https://github.com/eriksjolund/simd-diagonal-load-json-demo.git
 ```
 
-In case you use SELINUX (e.g. Fedora, CentOS), relabel the directory _simd-diagonal-load-json-demo/examples_
-so that `podman run` can bind mount and read the files
-
-```
-chcon -R -t container_file_t simd-diagonal-load-json-demo/examples
-```
+### Example 1
 
 Generate some input with the included command-line tool __generate-input__ 
 
 ```
-$ cat simd-diagonal-load-json-demo/examples/example1/inputspec.json | generate-input
-{ "spec": {"numMatrices": "1", "matrixWidth": "8", "matrixHeight": "16", "minValue": "0", "maxValue": "222"},
+$ cd simd-diagonal-load-json-demo/examples/example1/
+$ cat inputspec.json
+{
+  "numMatrices" : 1,
+  "matrixWidth" : 8,
+  "matrixHeight" : 8,
+  "minValue" : 0,
+  "maxValue" : 255
+}
+$ cat inputspec.json | generate-input > /tmp/input.json
+$ cat /tmp/input.json
+{ "spec": {"numMatrices": "1", "matrixWidth": "8", "matrixHeight": "8", "minValue": "0", "maxValue": "255"},
   "matrices": [{"columns": [
-    {"elements": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]},
-    {"elements": ["16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]},
-    {"elements": ["32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47"]},
-    {"elements": ["48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63"]},
-    {"elements": ["64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79"]},
-    {"elements": ["80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95"]},
-    {"elements": ["96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111"]},
-    {"elements": ["112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127"]} ]}] }
+    {"elements": ["0", "1", "2", "3", "4", "5", "6", "7"]},
+    {"elements": ["8", "9", "10", "11", "12", "13", "14", "15"]},
+    {"elements": ["16", "17", "18", "19", "20", "21", "22", "23"]},
+    {"elements": ["24", "25", "26", "27", "28", "29", "30", "31"]},
+    {"elements": ["32", "33", "34", "35", "36", "37", "38", "39"]},
+    {"elements": ["40", "41", "42", "43", "44", "45", "46", "47"]},
+    {"elements": ["48", "49", "50", "51", "52", "53", "54", "55"]},
+    {"elements": ["56", "57", "58", "59", "60", "61", "62", "63"]} ]}] }
 $
 ```
 
-With the help of the command-line tool [jq](https://stedolan.github.io/jq/) the JSON can be converted like this
+Another way to visualize the input matrix is by using the command-line tool [jq](https://stedolan.github.io/jq/)
 
 ```
 $ cat /tmp/input.json | jq -c '[.matrices[0] | .columns[].elements][]'
@@ -90,7 +93,7 @@ $
 The included command-line tool __demo__ performs the algortihm and prints out the result to stdout
 
 ```
-$ cat simd-diagonal-load-json-demo/examples/example1/inputspec.json | generate-input | demo -c /examples/example1/demo-options.json | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]' 
+$ cat /tmp/input.json | demo 3< demo-options.json | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]'
 ["0",null,null,null,null,null,null,null]
 ["8","1",null,null,null,null,null,null]
 ["16","9","2",null,null,null,null,null]
