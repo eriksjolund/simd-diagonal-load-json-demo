@@ -35,9 +35,9 @@ __Requirements__: podman version __2.1.0__ or higher. (Yet to be released, see h
 
 First define some bash aliases
 ```
-alias generate-input="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest generate-input"
-alias demo="podman run --rm -i --preserve-fds=1 docker.io/eriksjolund/simd-diagonal-load-json-demo:latest demo"
-alias jq="podman run --rm -i docker.io/eriksjolund/simd-diagonal-load-json-demo:latest jq"
+alias generate-input="podman run --rm -i --net=none docker.io/eriksjolund/simd-diagonal-load-json-demo:latest generate-input"
+alias demo="podman run --rm -i --preserve-fds=1 --net=none docker.io/eriksjolund/simd-diagonal-load-json-demo:latest demo"
+alias jq="podman run --rm -i --net=none docker.io/eriksjolund/simd-diagonal-load-json-demo:latest jq"
 ```
 
 Clone the repository so that you have the input files for the examples available.
