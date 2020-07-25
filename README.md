@@ -26,9 +26,9 @@ for (int i=0; i < width - 16; ++i) {
 
 https://stackoverflow.com/questions/15198011/how-to-load-a-sliding-diagonal-vector-from-data-stored-column-wise-withsse
 
-## Run simd-diagonal-load-json-demo in container
+## Run simd-diagonal-load-json-demo in a container
 
-An [OCI](https://opencontainers.org/) Container of simd-diagonal-load-json-demo is
+An [OCI](https://opencontainers.org/) container of simd-diagonal-load-json-demo is
 available on Dockerhub.
 
 __Requirements__: podman version ? or higher. Right now it's a bit unclear if `podman run --preserve-fds` is available or not (see https://github.com/containers/podman/issues/6458).
@@ -90,7 +90,7 @@ $ cat /tmp/input.json | jq -c '[.matrices[0] | .columns[].elements][]'
 $
 ```
 
-The included command-line tool __demo__ performs the algortihm and prints out the result to stdout
+The included command-line tool __demo__ performs the algorithm and prints out the result to stdout
 
 ```
 $ cat /tmp/input.json | demo 3< demo-options.json | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]'
