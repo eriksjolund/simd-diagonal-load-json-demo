@@ -1,7 +1,7 @@
 {
   "numMatrices" : 1,
   "matrixWidth" : 8,
-  "matrixHeight" : 16,
+  "matrixHeight" : 8,
   "minValue" : 0,
- "maxValue" : 222
+  "maxValue" : 255
 }
