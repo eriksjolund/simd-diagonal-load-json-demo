@@ -31,7 +31,7 @@ https://stackoverflow.com/questions/15198011/how-to-load-a-sliding-diagonal-vect
 An [OCI](https://opencontainers.org/) container of simd-diagonal-load-json-demo is
 available on Dockerhub.
 
-__Requirements__: podman version ? or higher. Right now it's a bit unclear if `podman run --preserve-fds` is available or not (see https://github.com/containers/podman/issues/6458).
+__Requirements__: podman version __2.1.0__ or higher. (Yet to be released, see https://github.com/containers/podman/issues/6458).
 
 First define some bash aliases
 ```
