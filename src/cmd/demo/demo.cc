@@ -5,10 +5,10 @@
 #include <cassert>
 #include <unistd.h>
 #include <QCoreApplication>
-#include <QDebug>
 #include <QDir>
 #include <QtPlugin>
 #include <QString>
+#include <QTextStream>
 #include <stdexcept>
 #include <simd-diagonal-load/array-helper/two_to_the_power_of.h>
 #include <simd-diagonal-load-json-demo/defines-from-cmake-variables/config.h>
@@ -42,9 +42,25 @@ void run_demo(const DemoRunOptions::Reader& run_options,
     throw std::runtime_error("The plugin dir does not exist");
   }
   bool found_plugin = false;
+  QString plugin_debug_info;
+
   for (const auto& fileinfo : plugin_dir.entryInfoList(
            QStringList{} << "lib*.so", QDir::NoDotAndDotDot | QDir::Files)) {
     DemoPluginLoader loader(fileinfo.absoluteFilePath());
+
+    {
+      QTextStream debug_stream(&plugin_debug_info);
+      debug_stream << "loaded plugin: " << loader.demo_plugin().simd_arch() <<
+        " " << loader.demo_plugin().num_loads() <<
+        " " << loader.demo_plugin().num_vertical_mixing() <<
+        " " << loader.demo_plugin().num_vertical_subdivisions() <<
+        " " << loader.demo_plugin().simdvector_bitlength() <<
+        " " << loader.demo_plugin().integertype_num_bits() <<
+        " " << loader.demo_plugin().integertype() <<
+        " " << loader.demo_plugin().matrix_width() <<
+        " (simd_arch, num_loads, num_vertical_mixing,num_vertical_subdivisions, "
+        "Simdvector_bitlength, integertype_num_bits, integertype, matrix_width)\n";
+    }
 
     if (loader.demo_plugin().simd_arch().toStdString() ==
             run_options.getSimdArch().cStr() &&
@@ -69,7 +85,7 @@ void run_demo(const DemoRunOptions::Reader& run_options,
     }
   }
   if (!found_plugin) {
-    throw std::runtime_error("Could not find any plugin supporting the input");
+    throw std::runtime_error(  qPrintable("Could not find any plugin supporting the input\n\n" + plugin_debug_info));
   }
 }
 
