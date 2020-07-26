@@ -3,5 +3,5 @@
   "numVerticalSubdivisions" : 1,
   "numVerticalMixing" : 1,
   "simdArch" : "ARCH_X86_AVX2",
-  "integerChoice" : "uint16_t"
+  "integerChoice" : "uint32_t"
 }
