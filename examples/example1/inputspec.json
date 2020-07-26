@@ -3,5 +3,5 @@
   "matrixWidth" : 8,
   "matrixHeight" : 8,
   "minValue" : 0,
-  "maxValue" : 255
+  "maxValue" : 63
 }
