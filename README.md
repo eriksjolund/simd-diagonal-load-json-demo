@@ -58,7 +58,7 @@ $ cat inputspec.json
   "matrixWidth" : 8,
   "matrixHeight" : 8,
   "minValue" : 0,
-  "maxValue" : 255
+  "maxValue" : 63
 }
 $ cat inputspec.json | generate-input > /tmp/input.json
 $ cat /tmp/input.json
@@ -93,6 +93,14 @@ $
 The included command-line tool __demo__ performs the algorithm and prints out the result to stdout
 
 ```
+$ cat demo-options.json
+{
+  "numLoads" : 1,
+  "numVerticalSubdivisions" : 1,
+  "numVerticalMixing" : 1,
+  "simdArch" : "ARCH_X86_AVX2",
+  "integerChoice" : "uint32_t"
+}
 $ cat /tmp/input.json | demo 3< demo-options.json | jq -c '[.matrices[0].diagonals[] | [.elements[].value]][]'
 ["0",null,null,null,null,null,null,null]
 ["8","1",null,null,null,null,null,null]
