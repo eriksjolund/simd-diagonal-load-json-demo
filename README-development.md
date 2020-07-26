@@ -52,6 +52,5 @@ The last lines printed to stdout in the previous command defines some aliases:
 
 Copy-paste those lines into the bash shell.
 
-`demorun` is a work-around until podman 2.1.0 has been released. (Assuming that podman release will have support for `podman run --preserved-fds`).
-Run `demorun` once to start a running container.
-After that the alias `demo` will work.
+`demorun` is a work-around until podman 2.1.0 has been released. (Assuming that podman release will have support for `podman run --preserved-fds`, see https://github.com/containers/podman/issues/6458#issuecomment-663868176).
+After running `demorun` once, the alias `demo` will start to work.
