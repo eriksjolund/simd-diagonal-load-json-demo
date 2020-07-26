@@ -29,7 +29,7 @@ https://stackoverflow.com/questions/15198011/how-to-load-a-sliding-diagonal-vect
 ## Run simd-diagonal-load-json-demo in a container
 
 An [OCI](https://opencontainers.org/) container of simd-diagonal-load-json-demo is
-available on Dockerhub.
+available on Dockerhub as __docker.io/eriksjolund/simd-diagonal-load-json-demo:latest__. (It is built from [Dockerfile.fedora](Dockerfile.fedora) by the Github action [.github/workflows/publish-container.yml](.github/workflows/publish-container.yml))
 
 __Requirements__: podman version __2.1.0__ or higher. (Yet to be released, see https://github.com/containers/podman/issues/6458).
 
